@@ -6,7 +6,7 @@ from starlette.applications import Starlette
 from starlette.responses import JSONResponse, HTMLResponse, RedirectResponse, FileResponse
 from starlette.staticfiles import StaticFiles
 
-from services import Auth, CreatContact
+from services import Auth, CreateContact
 
 app = Starlette()
 STATIC_ROOT = "../static/droplinks/dist/"
@@ -42,7 +42,7 @@ async def contact(request):
     if request.method == 'GET':
         return home(request)
     data = await request.json()
-    response, status_code = CreatContact.execute(data)
+    response, status_code = await CreateContact.execute(data)
     return JSONResponse(response, status_code=status_code)
 
 

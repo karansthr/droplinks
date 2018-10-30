@@ -22,7 +22,7 @@ class CreateContact(Service):
 
     async def process(self):
         collection = database.contacts
-        await collection.insert_one(self.dict)
+        await collection.insert_one(self.data)
         return {'message': 'Request submitted successfully'}, 200
 
 

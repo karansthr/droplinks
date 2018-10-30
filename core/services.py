@@ -2,13 +2,14 @@ from .exceptions import InvalidInputsError
 
 class Service:
 
-    def __init__(self, dict, strict=True):
-        self.dict = [attr for attr in dir(self) if not callable(getattr(self, attr)) and not attr.startswith("__")]
+    def __init__(self, data, strict=True):
+        self.fields = [attr for attr in dir(self) if not callable(getattr(self, attr)) and not attr.startswith("__")]
+        self.data = data
         self.errors = {}
         self.non_field_errors = {}
         self.strict = strict
 
-        for key, value in dict.items():
+        for key, value in data.items():
             try:
                 getattr(self, key).value = value
             except:
@@ -16,7 +17,7 @@ class Service:
             
     def is_valid(self):
         valid = True
-        for field in self.dict:
+        for field in self.data:
             attr = getattr(self, field)
             if not (self.strict or attr.value):
                 continue
@@ -35,8 +36,8 @@ class Service:
         raise NotImplementedError()
     
     @classmethod
-    async def execute(cls, dict, static=True):
-        instance = cls(dict, static)
+    async def execute(cls, data, static=True):
+        instance = cls(data, static)
         instance.service_clean()
         assert hasattr(instance, 'process'), "'Process' method undefined"
         return await instance.process()
