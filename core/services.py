@@ -1,5 +1,3 @@
-from .exceptions import InvalidInputsError
-
 class Service:
 
     def __init__(self, data, strict=True):
@@ -22,15 +20,9 @@ class Service:
             if not (self.strict or attr.value):
                 continue
             if not attr.is_valid():
-                self.errors[attr] = attr.errors
+                self.errors[field] = attr.errors
                 valid = False
         return valid
-    
-    def service_clean(self):
-        if not self.is_valid():
-            raise InvalidInputsError(
-                self.errors, self.non_field_errors
-            )
 
     def process(self):
         raise NotImplementedError()
@@ -38,6 +30,7 @@ class Service:
     @classmethod
     async def execute(cls, data, static=True):
         instance = cls(data, static)
-        instance.service_clean()
-        assert hasattr(instance, 'process'), "'Process' method undefined"
-        return await instance.process()
+        if instance.is_valid():
+            return await instance.process()
+        # log instance.non_field_errors
+        return instance.errors, 400

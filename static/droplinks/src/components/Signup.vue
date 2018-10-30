@@ -8,17 +8,22 @@
                             <form>
                                 <div class="field">
                                     <div class="control">
-                                        <input class="input" type="email" placeholder="Your Email" autofocus="">
+                                        <input v-model="form.username" class="input" placeholder="username" autofocus="">
                                     </div>
                                 </div>
                                 <div class="field">
                                     <div class="control">
-                                        <input class="input" type="password" placeholder="Your Password">
+                                        <input v-model="form.email" class="input" type="email" placeholder="Your Email" autofocus="">
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="control">
+                                        <input v-model="form.password" class="input" type="password" placeholder="Your Password">
                                     </div>
                                 </div>
                                 <div class="field">
                                         <div class="control">
-                                            <input class="input" type="password" placeholder="Re-enter Password">
+                                            <input v-model="form.repassword" class="input" type="password" placeholder="Re-enter Password">
                                         </div>
                                 </div>
                                 <button class="button is-block is-primary is-fullwidth">Sign up</button>
@@ -32,6 +37,38 @@
 
 <script>
 export default {
-  name: 'Signup'
+  name: 'Signup',
+  data: function() {
+      return {
+          form: {
+            username: '',
+            email: '',
+            password: '',
+            repassword: '',
+          }
+      }
+  },
+  methods: {
+    resetForm: function() {
+        var self = this; //*this* will refer to Object.keys below`
+        Object.keys(this.form).forEach(function(key,index) {
+          self.form[key] = '';
+        });
+      },
+
+    submitForm: function(event){
+      this.ajaxRequest = true
+      event.preventDefault()
+      let url="/contact"
+      this.$http.post(url, JSON.stringify(this.form))
+      .then(response => {
+      this.resetForm()
+      this.$snackbar.open('You\'ll be hearing from me soon')
+    }).catch((err) => {
+      console.log(err)
+      this.$snackbar.open({message: 'Error occured !', type:'is-warning'})
+      })
+    }
+  }
 }
 </script>

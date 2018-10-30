@@ -44,7 +44,7 @@ class Auth:
     
     @classmethod
     async def login(cls, username, password):
-        cls.Login(username=username, password=password)
+        cls.Login({'username': username, 'password':password})
         user = await cls.is_valid_user(username, password)
         if user is None:
             message = {'message': 'Invalid credential or user does not exits'}
@@ -67,7 +67,7 @@ class Auth:
             message = {'message': 'Password does not match'}
             status_code = 403
             return message, status_code
-        cls.Register(**userdata)
+        cls.Register(userdata)
         try:
             await cls.create_user(**userdata)
             message = {'message': 'User created successfully'}
