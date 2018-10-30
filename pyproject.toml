@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "droplinks"
+version = "0.1.0"
+description = "A Web App to drop links and access them easily"
+authors = ["Karan Suthar <karansthr97@gmail.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.4"
+starlette = "^0.5.4"
+motor = "^2.0"
+uvloop = "^0.11.2"
+uvicorn = "^0.3.16"
+aiofiles = "^0.4.0"
+python-decouple = "^3.1"
+ptpython = "^2.0"
+WTForms = "^2.2"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
