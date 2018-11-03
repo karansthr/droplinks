@@ -1,4 +1,4 @@
-import validators
+from . import validators
 from utils import status_codes
 
 
@@ -34,8 +34,8 @@ class Service:
         raise NotImplementedError()
 
     @classmethod
-    async def execute(cls, data, static=True):
-        instance = cls(data, static)
+    async def execute(cls, data, strict=True):
+        instance = cls(data, strict)
         if instance.is_valid():
             return await instance.process()
         # log instance.non_field_errors

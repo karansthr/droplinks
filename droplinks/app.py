@@ -3,10 +3,11 @@ import os
 
 import uvicorn
 from starlette.applications import Starlette
-from starlette.responses import FileResponse, JSONResponse
+from starlette.responses import FileResponse, JSONResponse, RedirectResponse
 from starlette.staticfiles import StaticFiles
 
 from core.settings import STATIC_ROOT
+from utils import status_codes
 
 from .services import Auth, CreateContact
 
@@ -25,7 +26,9 @@ async def signup(request):
         return home(request)
     if request.method == "POST":
         data = await request.json()
-        response, status = await Auth.signup(data)
+        response, status = await Auth.SignUpUser.execute(data)
+        if status == status_codes.OK:
+            return RedirectResponse("/login")
         return JSONResponse(response, status)
 
 
@@ -35,7 +38,8 @@ async def signin(request):
         return home(request)
     if request.method == "POST":
         data = await request.json()
-        response, status = await Auth.login(data)
+        response, status, session_id = await Auth.LoginUser.execute(data)
+        request.cookies["session_id"] = session_id
         return JSONResponse(response, status)
 
 
@@ -46,6 +50,11 @@ async def contact(request):
     data = await request.json()
     response, status_code = await CreateContact.execute(data)
     return JSONResponse(response, status_code=status_code)
+
+
+@app.route("/logout")
+async def logout(request):
+    pass
 
 
 @app.route(".*", methods=["GET"])
