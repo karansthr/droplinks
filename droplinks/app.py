@@ -55,7 +55,9 @@ async def contact(request):
 
 @app.route("/logout")
 async def logout(request):
-    pass
+    response = FileResponse(os.path.join(STATIC_ROOT, "index.html"))
+    response.delete_cookie('session_id')
+    return response
 
 
 @app.route(".*", methods=["GET"])
