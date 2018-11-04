@@ -38,9 +38,10 @@ async def signin(request):
         return home(request)
     if request.method == "POST":
         data = await request.json()
-        response, status, session_id = await Auth.LoginUser.execute(data)
-        request.cookies["session_id"] = session_id
-        return JSONResponse(response, status)
+        message, status, session_id = await Auth.LoginUser.execute(data)
+        response = JSONResponse(message, status)
+        response.set_cookie('session_id', session_id)
+        return response
 
 
 @app.route("/contact", methods=["POST", "GET"])
@@ -48,8 +49,8 @@ async def contact(request):
     if request.method == "GET":
         return home(request)
     data = await request.json()
-    response, status_code = await CreateContact.execute(data)
-    return JSONResponse(response, status_code=status_code)
+    message, status_code = await CreateContact.execute(data)
+    return JSONResponse(message, status_code=status_code)
 
 
 @app.route("/logout")

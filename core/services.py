@@ -22,7 +22,6 @@ class Service:
         valid = True
         for field in self.data:
             attr = getattr(self, field)
-            print(attr, vars(attr))
             if not (self.strict or attr.value):
                 continue
             if not attr.is_valid():
