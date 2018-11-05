@@ -5,25 +5,18 @@ from utils import status_codes
 class Service:
     def __init__(self, data, strict=True):
         self.fields = [
-            attr for attr in dir(self) if isinstance(attr, validators.Validator)
+            attr for attr in dir(self) if isinstance(getattr(self, attr), validators.Validator)
         ]
         self.data = data
         self.errors = {}
         self.non_field_errors = {}
-        self.strict = strict
-
-        for key, value in data.items():
-            try:
-                getattr(self, key).value = value
-            except Exception:
-                self.non_field_errors[key] = f"'{key}' is not a valid field"
 
     def is_valid(self):
         valid = True
-        for field in self.data:
+        for field in self.fields:
             attr = getattr(self, field)
-            if not (self.strict or attr.value):
-                continue
+            attr.value = self.data.get(field) or None
+            attr.errors = []
             if not attr.is_valid():
                 self.errors[field] = attr.errors
                 valid = False
@@ -33,8 +26,8 @@ class Service:
         raise NotImplementedError()
 
     @classmethod
-    async def execute(cls, data, strict=True):
-        instance = cls(data, strict)
+    async def execute(cls, data):
+        instance = cls(data)
         if instance.is_valid():
             return await instance.process()
         # log instance.non_field_errors

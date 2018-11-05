@@ -2,21 +2,25 @@ import re
 
 
 class Validator:
-    def __init__(self):
+    def __init__(self, required=True):
         self.value = None
         self.errors = []
+        self.required = required
 
     def is_valid(self):
         raise NotImplementedError()
 
 
 class String(Validator):
-    def __init__(self, min_length=None, max_length=None):
+    def __init__(self, min_length=None, max_length=None, required=True):
         self.min_length = min_length
         self.max_length = max_length
-        super().__init__()
+        super().__init__(required)
 
     def is_valid(self):
+        if self.value is None and self.required:
+            self.errors.append("It is a required field")
+            return False
         if not isinstance(self.value, str):
             self.errors.append("It must be a string")
             return False
@@ -31,6 +35,9 @@ class String(Validator):
 
 class Boolean(Validator):
     def is_valid(self):
+        if self.value is None and self.required:
+            self.errors.append("It is a required field")
+            return False
         if not isinstance(self.value, bool):
             self.errors.append("It must be a boolean")
             return False
@@ -39,6 +46,9 @@ class Boolean(Validator):
 
 class Decimal(Validator):
     def is_valid(self):
+        if self.value is None and self.required:
+            self.errors.append("It is a required field")
+            return False
         if not isinstance(self.value, (int, float)):
             self.errors.append("It must be a string")
             return False
@@ -47,6 +57,9 @@ class Decimal(Validator):
 
 class Email(String):
     def is_valid(self):
+        if self.value is None and self.required:
+            self.errors.append("It is a required field")
+            return False
         regex = r"^[\w\.\+\-]+\@[\w]+\.[a-z]{2,3}$"
         if not bool(re.search(regex, self.value)):
             self.errors.append("Invalid email")

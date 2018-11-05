@@ -60,6 +60,7 @@ export default {
                 .then(response => {
                     this.resetForm()
                     this.$snackbar.open('Login succeesful')
+                    this.$router.push('/')
                 }).catch((err) => {
                     console.log(err)
                     this.$snackbar.open({ message: 'Error occured !', type: 'is-warning' })
