@@ -1,3 +1,5 @@
+import os
+
 import hashlib
 import uuid
 from datetime import datetime, timedelta
@@ -7,6 +9,8 @@ from droplinks.db import database
 user_collection = database.user
 session_collection = database.session
 
+
+a = 3
 
 def hash_password(password):
     return hashlib.sha224(password.encode('utf-8')).hexdigest()
