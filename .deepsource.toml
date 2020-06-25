@@ -7,13 +7,6 @@ enabled = true
   [analyzers.meta]
   runtime_version = "3.x.x"
 
-[[analyzers]]
-name = "javascript"
-enabled = true
-
-  [analyzers.meta]
-  style_guide = "Standard"
-
 [[transformers]]
 name = "black"
 enabled = true
