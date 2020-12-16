@@ -13,6 +13,12 @@ def hash_password(password):
 
 
 async def user_exists(username=None, email=None):
+    
+    
+    
+    
+    
+    
     if username is email is None:
         return False
     if username and await database.user_collection.find_one({"username": username}):
