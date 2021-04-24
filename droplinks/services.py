@@ -33,25 +33,25 @@ class Auth:
         email = validators.Email()
 
         async def process(self):
-            if await user_exists(self.data['username']):
-                return ({'message': 'User already exists'}, status_codes.CONFLICT)
-            if self.data['password'] != self.data['repassword']:
+            if await user_exists(self.data["username"]):
+                return ({"message": "User already exists"}, status_codes.CONFLICT)
+            if self.data["password"] != self.data["repassword"]:
                 return (
-                    {'password': ['Password does not match']},
+                    {"password": ["Password does not match"]},
                     status_codes.UNAUTHORIZED,
                 )
-            if ' ' in self.data['username']:
+            if " " in self.data["username"]:
                 return (
-                    {'username': ["username must not contain space"]},
-                    status_codes.BAD_REQUEST
+                    {"username": ["username must not contain space"]},
+                    status_codes.BAD_REQUEST,
                 )
-            self.data['password'] = hash_password(self.data.pop('repassword'))
+            self.data["password"] = hash_password(self.data.pop("repassword"))
             try:
                 await create_user(self.data)
-                message = {'message': 'User created successfully'}
+                message = {"message": "User created successfully"}
                 status_code = status_codes.OK
             except Exception:
-                message = {'message': 'Error creating user'}
+                message = {"message": "Error creating user"}
                 status_code = status_codes.BAD_REQUEST
                 # log error
             return message, status_code
@@ -62,12 +62,12 @@ class Auth:
 
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
-            self.data['password'] = hash_password(self.data['password'])
+            self.data["password"] = hash_password(self.data["password"])
 
         async def process(self, *args, **kwargs):
-            user = await is_valid_user(self.data['username'], self.data['password'])
+            user = await is_valid_user(self.data["username"], self.data["password"])
             if user is None:
-                message = {'message': 'Invalid credential or user does not exits'}
+                message = {"message": "Invalid credential or user does not exits"}
                 return message, status_codes.UNAUTHORIZED
-            session_id = await create_session(self.data['username'])
-            return {'message': 'Login successful'}, status_codes.OK, session_id
+            session_id = await create_session(self.data["username"])
+            return {"message": "Login successful"}, status_codes.OK, session_id

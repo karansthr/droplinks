@@ -40,7 +40,7 @@ async def signin(request):
         data = await request.json()
         message, status, session_id = await Auth.LoginUser.execute(data)
         response = JSONResponse(message, status)
-        response.set_cookie('session_id', session_id)
+        response.set_cookie("session_id", session_id)
         return response
 
 
@@ -56,7 +56,7 @@ async def contact(request):
 @app.route("/logout")
 async def logout(request):
     response = FileResponse(os.path.join(STATIC_ROOT, "index.html"))
-    response.delete_cookie('session_id')
+    response.delete_cookie("session_id")
     return response
 
 
