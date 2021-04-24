@@ -9,16 +9,11 @@ session_collection = database.session
 
 
 def hash_password(password):
-    return hashlib.sha224(password.encode('utf-8')).hexdigest()
+    return hashlib.sha224(password.encode("utf-8")).hexdigest()
 
 
 async def user_exists(username=None, email=None):
-    
-    
-    
-    
-    
-    
+
     if username is email is None:
         return False
     if username and await database.user_collection.find_one({"username": username}):
@@ -32,7 +27,11 @@ async def is_valid_user(username, password):
     if await database.user_collection.find_one(
         {"username": username, "password": password}
     ):
-        print( await database.user_collection.find_one({"username": username, "password": password}))
+        print(
+            await database.user_collection.find_one(
+                {"username": username, "password": password}
+            )
+        )
         return True
     return False
 

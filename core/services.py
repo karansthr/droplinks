@@ -5,7 +5,9 @@ from utils import status_codes
 class Service:
     def __init__(self, data, strict=True):
         self.fields = [
-            attr for attr in dir(self) if isinstance(getattr(self, attr), validators.Validator)
+            attr
+            for attr in dir(self)
+            if isinstance(getattr(self, attr), validators.Validator)
         ]
         self.data = data
         self.errors = {}

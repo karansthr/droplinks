@@ -1,5 +1,6 @@
 import sys
 import unittest
+
 sys.path.append("..")
 
 from core import validators
@@ -14,7 +15,7 @@ class TestClass(Service):
 
 
 class TestValidors(unittest.TestCase):
-    
+
     # def test_email(self):
     #     t = TestClass({'email': 'karansthr97@gmail.com'}, strict=False)
     #     self.assertTrue(t.is_valid())
@@ -26,7 +27,7 @@ class TestValidors(unittest.TestCase):
     #     self.assertTrue(t.is_valid())
 
     def test_string(self):
-        t = TestClass({'name': 'k'})
+        t = TestClass({"name": "k"})
         self.assertFalse(t.is_valid())
         # t = TestClass({'address': '127 Baker Stret'}, strict=False)
         # self.assertTrue(t.is_valid())
