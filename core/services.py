@@ -3,7 +3,7 @@ from utils import status_codes
 
 
 class Service:
-    def __init__(self, data, strict=True):
+    def __init__(self, data):
         self.fields = [
             attr for attr in dir(self) if isinstance(getattr(self, attr), validators.Validator)
         ]
